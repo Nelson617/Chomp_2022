@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Arrays;
 
 public class MyPlayer {
     public Chip[][] gameBoard;
@@ -9,17 +10,20 @@ public class MyPlayer {
 
         int row = 3;
         int col = 3;
-        int array[][] = new int [row][col];
+        int array[][] = new int[row][col];
 
         /***
          * This code will run just once, when the game opens.
          * Add your code here.
          */
 
-        //fill columns array with 0's
-        for (int i = 0; i  < columns.length; i++);{
-            for (int w = 0; w < columns.length; w++);{
+        Print3x3boards();
 
+        //fill columns array with 0's
+        for (int i = 0; i < columns.length; i++) ;
+        {
+            for (int w = 0; w < columns.length; w++) ;
+            {
 
 
             }
@@ -29,7 +33,8 @@ public class MyPlayer {
 
     public Point move(Chip[][] pBoard) {
 
-        System.out.println("MyPlayer Move");
+        System.out.println("My Player Move");
+
 
         gameBoard = pBoard;
         int column = 0;
@@ -43,13 +48,94 @@ public class MyPlayer {
          * Add your code to return the row and the column of the chip you want to take.
          * You'll be returning a data type called Point which consists of two integers.
          */
-        System.out.println("My player clicked " );
+        System.out.println("My player clicked ");
+
+        for (int c = 0; c < columns.length; c++) {
+            int count = 0;
+            for (int r = 0; r < gameBoard.length; r++) {
+                if (gameBoard[r][c].isAlive == true) {
+                    count++;
+                }
+            }
+            columns[c] = count;
+        }
+
+        System.out.println(Arrays.toString(columns));
 
         Point myMove = new Point(row, column);
+
+//        if (columns[0] == 3 && columns[1] == 3 && columns[2] == 0) {
+//            myMove = new Point(2, 1);
+//        }
+
         return myMove;
+
     }
 
+    public void Print3x3boards() {
+        //using 1 or more for a loop, print all possiable 3x3 or smaller board states
+        for (int i = 1; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                for (int k = 0; k <= 3; k++) {
+                    if (i >= j && j >= k) {
+//                        System.out.println(i + " " + j + " " + k);
+                        oneMove(i, j, k);
+                    }
+                }
+            }
+            System.out.println();
+
+
+        }
+    }
+
+    public void oneMove(int i, int j, int k) {
+        System.out.println("Next Board");
+
+        System.out.println("Board: " + i + " " + j + " " + k);
+
+        System.out.println("Boards that are one move away:");
+
+        System.out.println("Last Row");
+
+        if (k > 0) {
+            for (int x = k - 1; x >= 0; x--) {
+                System.out.println(i + " " + j + " " + x);
+            }
+        }
+
+        System.out.println("Middle Row");
+
+//        System.out.println(i + " " + j + " " + k);
+        if (j > 0) {
+            for (int c = j - 1; c >= 0; c--) {
+                if (c < k){
+                    System.out.println(i + " " + c + " " + c);
+                }
+                else {
+                    System.out.println(i + " " + c + " " + k);
+
+                }
+            }
+        }
+
+        System.out.println("First Row");
+
+//        System.out.println(i + " " + j + " " + k);
+        if (i >= 2) {
+            for (int v = i - 1; v >= 1; v--) {
+                if (v < j){
+                    System.out.println(v + " " + v + " " + v);
+                }
+                else {
+                    System.out.println(v + " " + j + " " + k);
+
+                }
+            }
+        }
+    }
 }
+
 // add code to fill in the columns array
 //so that it represents the gameboard in number form
 //print columns array to show its working
