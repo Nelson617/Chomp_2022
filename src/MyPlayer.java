@@ -5,12 +5,19 @@ public class MyPlayer {
     public Chip[][] gameBoard;
     public int[] columns;
 
+    public Board[] losingBoards = new Board[10];
+    public Board[] winningBoards = new Board[20];
+
     public MyPlayer() {
         columns = new int[10];
 
         int row = 3;
         int col = 3;
         int array[][] = new int[row][col];
+
+        Board b = new Board(1, 0, 0, 0, 0);
+        losingBoards[0] = new Board(1, 0, 0, 0, 0);
+        winningBoards[0] = new Board(1, 1, 0, 0, 1);
 
         /***
          * This code will run just once, when the game opens.
@@ -90,52 +97,74 @@ public class MyPlayer {
     }
 
     public void oneMove(int i, int j, int k) {
+
+        boolean isWinningBoard = false;
+
+        System.out.println();
+
+        System.out.println("Boards that are one move away:");
+
         System.out.println("Next Board");
 
         System.out.println("Board: " + i + " " + j + " " + k);
 
-        System.out.println("Boards that are one move away:");
 
-        System.out.println("Last Row");
+        System.out.println();
+
+        System.out.println("Third column");
 
         if (k > 0) {
+            // print coordiantes
             for (int x = k - 1; x >= 0; x--) {
-                System.out.println(i + " " + j + " " + x);
+                System.out.println(i + " " + j + " " + x  + " Move: (" + x + ", " + 2 + ")");
+                if ( i == losingBoards[0].cols[0] && j == losingBoards[1].cols[1] && x == losingBoards[2].cols[2] ) {
+                    isWinningBoard = true;
+                    System.out.println("found loser");
+                }
             }
         }
 
-        System.out.println("Middle Row");
+
+
+        System.out.println();
+        System.out.println("Second column");
 
 //        System.out.println(i + " " + j + " " + k);
         if (j > 0) {
             for (int c = j - 1; c >= 0; c--) {
                 if (c < k){
-                    System.out.println(i + " " + c + " " + c);
+                    System.out.println(i + " " + c + " " + c + " Move: (" + c + ", " + 1 + ")");
                 }
                 else {
-                    System.out.println(i + " " + c + " " + k);
+                    System.out.println(i + " " + c + " " + k + " Move: (" + c + ", " + 1 + ")");
 
                 }
             }
         }
 
-        System.out.println("First Row");
+        System.out.println();
+        System.out.println("First column");
 
 //        System.out.println(i + " " + j + " " + k);
         if (i >= 2) {
             for (int v = i - 1; v >= 1; v--) {
                 if (v < j){
-                    System.out.println(v + " " + v + " " + v);
+                    System.out.println(v + " " + v + " " + v + " Move: (" + v + ", " + 0 + ")");
                 }
                 else {
-                    System.out.println(v + " " + j + " " + k);
+                    System.out.println(v + " " + j + " " + k + " Move: (" + v + ", " + 0 + ")");
 
                 }
             }
         }
+
+        // was one of those one move away boards a loser?
+        // if yes, add (i,j,k, row, col) to winningBoards
+        // otherwise, add to losingBoards
+        if (isWinningBoard == true) {
+
+        }
     }
 }
 
-// add code to fill in the columns array
-//so that it represents the gameboard in number form
-//print columns array to show its working
+
