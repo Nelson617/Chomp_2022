@@ -5,6 +5,8 @@ public class MyPlayer {
     public Chip[][] gameBoard;
     public int[] columns;
 
+    public int nLosers = 0;
+    public int nWinners = 0;
     public Board[] losingBoards = new Board[10];
     public Board[] winningBoards = new Board[20];
 
@@ -17,7 +19,8 @@ public class MyPlayer {
 
         Board b = new Board(1, 0, 0, 0, 0);
         losingBoards[0] = new Board(1, 0, 0, 0, 0);
-        winningBoards[0] = new Board(1, 1, 0, 0, 1);
+        nLosers++;
+//        winningBoards[0] = new Board(1, 1, 0, 0, 1);
 
         /***
          * This code will run just once, when the game opens.
@@ -69,6 +72,10 @@ public class MyPlayer {
 
         System.out.println(Arrays.toString(columns));
 
+        // loop through your winning boards
+        // if you find that winningBoards[i] cols has the same 3 numbers as columns[0], columns[1], columns[2]
+        // then row = winningBoards[i].winRow and column = winningBoards[i].winCol
+
         Point myMove = new Point(row, column);
 
 //        if (columns[0] == 3 && columns[1] == 3 && columns[2] == 0) {
@@ -99,6 +106,8 @@ public class MyPlayer {
     public void oneMove(int i, int j, int k) {
 
         boolean isWinningBoard = false;
+        int r = 0;
+        int c = 0;
 
         System.out.println();
 
@@ -108,7 +117,6 @@ public class MyPlayer {
 
         System.out.println("Board: " + i + " " + j + " " + k);
 
-
         System.out.println();
 
         System.out.println("Third column");
@@ -116,14 +124,17 @@ public class MyPlayer {
         if (k > 0) {
             // print coordiantes
             for (int x = k - 1; x >= 0; x--) {
-                System.out.println(i + " " + j + " " + x  + " Move: (" + x + ", " + 2 + ")");
-                if ( i == losingBoards[0].cols[0] && j == losingBoards[1].cols[1] && x == losingBoards[2].cols[2] ) {
-                    isWinningBoard = true;
-                    System.out.println("found loser");
+                System.out.println(i + " " + j + " " + x + " Move: (" + x + ", " + 2 + ")");
+                for(int l = 0; l < nLosers; l++) { // loops thru losing boards
+                    if (i == losingBoards[l].cols[0] && j == losingBoards[l].cols[1] && x == losingBoards[l].cols[2]) {
+                        isWinningBoard = true;
+                        r = x;
+                        c = 2;
+                        System.out.println("LOSING BOARD");
+                    }
                 }
             }
         }
-
 
 
         System.out.println();
@@ -132,39 +143,64 @@ public class MyPlayer {
 //        System.out.println(i + " " + j + " " + k);
         if (j > 0) {
             for (int c = j - 1; c >= 0; c--) {
-                if (c < k){
+                if (c < k) {
                     System.out.println(i + " " + c + " " + c + " Move: (" + c + ", " + 1 + ")");
-                }
-                else {
+                    for (int l = 0; l < nLosers; l++) { // loops thru losing boards
+                        if (i == losingBoards[l].cols[0] && c == losingBoards[l].cols[1] && c == losingBoards[l].cols[2]) {
+                            isWinningBoard = true;
+                            System.out.println("LOSING BOARD");
+                        }
+                    }
+                } else {
                     System.out.println(i + " " + c + " " + k + " Move: (" + c + ", " + 1 + ")");
-
+                    for (int l = 0; l < nLosers; l++) { // loops thru losing boards
+                        if (i == losingBoards[l].cols[0] && c == losingBoards[l].cols[1] && k == losingBoards[l].cols[2]) {
+                            isWinningBoard = true;
+                            System.out.println("LOSING BOARD");
+                        }
+                    }
                 }
             }
         }
 
-        System.out.println();
-        System.out.println("First column");
+            System.out.println();
+            System.out.println("First column");
 
 //        System.out.println(i + " " + j + " " + k);
-        if (i >= 2) {
-            for (int v = i - 1; v >= 1; v--) {
-                if (v < j){
-                    System.out.println(v + " " + v + " " + v + " Move: (" + v + ", " + 0 + ")");
-                }
-                else {
-                    System.out.println(v + " " + j + " " + k + " Move: (" + v + ", " + 0 + ")");
+            if (i >= 2) {
+                for (int v = i - 1; v >= 1; v--) { // v = 1
+                    if (v < j) {
+                        System.out.println(v + " " + v + " " + v + " Move: (" + v + ", " + 0 + ")");
+                        for(int l = 0; l < nLosers; l++) { // loops thru losing boards
+                            if (v == losingBoards[l].cols[0] && v == losingBoards[l].cols[1] && v == losingBoards[l].cols[2]) {
+                                isWinningBoard = true;
+                                System.out.println("LOSING BOARD");
+                            }
+                        }
+                    }
+                    else {
+                        System.out.println(v + " " + j + " " + k + " Move: (" + v + ", " + 0 + ")");
+                        for(int l = 0; l < nLosers; l++) { // loops thru losing boards
+                            if (v == losingBoards[l].cols[0] && j == losingBoards[l].cols[1] && k == losingBoards[l].cols[2]) {
+                                isWinningBoard = true;
+                                System.out.println("LOSING BOARD");
+                            }
+                        }
 
+                    }
                 }
             }
-        }
 
-        // was one of those one move away boards a loser?
-        // if yes, add (i,j,k, row, col) to winningBoards
-        // otherwise, add to losingBoards
-        if (isWinningBoard == true) {
+            // was one of those one move away boards a loser?
+            // if yes, add (i,j,k, row, col) to winningBoards
+            // otherwise, add to losingBoards
+            if (isWinningBoard == true) {
+                winningBoards[nWinners] = new Board(i,j,k, r,c);
+            } else {
 
+            }
         }
     }
-}
+
 
 
